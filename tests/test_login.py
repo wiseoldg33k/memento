@@ -24,7 +24,7 @@ def test_it_does_not_create_a_database_if_it_exists(state):
 
 @pytest.mark.slow
 @pytest.mark.parametrize('pincode', ['12345', '00000', 'éric'])
-def test_it_creates_a_database_with_an_original_pin_code(slow_state, pincode):
+def test_pin_code_hashing_takes_more_than_a_second(slow_state, pincode):
 
     start = time.perf_counter()
 
