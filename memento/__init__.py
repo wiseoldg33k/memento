@@ -15,3 +15,6 @@ class State:
             hashlib.sha256(pin.encode("utf-8")).digest()
         )
         return bcrypt.hashpw(fixed_size_password, self.salt)
+
+    def dump(self, decryption_key, db_location):
+        pass

@@ -1,7 +1,16 @@
 import pytest
 import time
 from memento import State
+import os
+import tempfile
 
+
+@pytest.fixture
+def db_location():
+    fd, name = tempfile.mkstemp(suffix='.db')
+    os.close(fd)
+    os.remove(name)
+    return name
 
 @pytest.fixture
 def state():
@@ -38,3 +47,14 @@ def test_pin_code_hashing_takes_more_than_a_second(slow_state, pincode):
     elapsed = end - start
 
     assert elapsed > 1
+
+
+def test_it_can_decrypt_encrypted_database(state, db_location):
+
+    assert not os.path.isfile(db_location)
+
+    state.dump(decryption_key, db_location)
+
+    assert os.path.isfile(db_location)
+
+    assert state.load(decryption_key, db_location)
