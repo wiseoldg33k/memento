@@ -4,6 +4,9 @@ from memento import State
 import os
 import tempfile
 
+@pytest.fixture
+def pincode():
+    return '12345'
 
 @pytest.fixture
 def db_location():
@@ -49,7 +52,11 @@ def test_pin_code_hashing_takes_more_than_a_second(slow_state, pincode):
     assert elapsed > 1
 
 
-def test_it_can_decrypt_encrypted_database(state, db_location):
+def test_it_can_decrypt_encrypted_database(state, db_location, pincode):
+
+    state._data = {'hello': 'world'}
+
+    decryption_key = state.hash_pin(pincode)
 
     assert not os.path.isfile(db_location)
 
@@ -58,3 +65,5 @@ def test_it_can_decrypt_encrypted_database(state, db_location):
     assert os.path.isfile(db_location)
 
     assert state.load(decryption_key, db_location)
+
+    assert state._data['hello'] == 'world'
