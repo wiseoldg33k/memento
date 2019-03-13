@@ -9,9 +9,10 @@ from kivy.clock import Clock
 
 class LoginWidget(GridLayout):
 
-    def __init__(self, state, db_filename, **kwargs):
+    def __init__(self, state, db_filename, sm, **kwargs):
         self.state = state
         self.db_filename = db_filename
+        self.sm = sm
         super().__init__(**kwargs)
 
         self.rows = 3
@@ -36,7 +37,7 @@ class LoginWidget(GridLayout):
         key = self.state.hash_pin(self.pincode.text)
         try:
             self.state.load(key, self.db_filename)
-            print('correct pin code')
+            self.sm.current = 'roster_screen'
         except cryptography.fernet.InvalidToken:
             close_button = Button(text='Close')
             popup = Popup(title='Invalid PIN code', 

@@ -20,6 +20,7 @@ from kivy.clock import Clock
 from memento.state import State
 from memento.widgets.login import LoginWidget
 from memento.widgets.createdb import CreateDBWidget
+from memento.widgets.roster import RosterWidget
 
 SALT_FILENAME = 'salt'
 DB_FILENAME = 'memento.db'
@@ -45,13 +46,21 @@ class MementoApp(App):
 
         login_screen = Screen(name='login_screen')
         login_screen.add_widget(LoginWidget(state=state, 
+                                            sm=sm,
                                             db_filename=DB_FILENAME))
         sm.add_widget(login_screen)
+
+
+        roster_screen = Screen(name='roster_screen')
+        roster_screen.add_widget(RosterWidget(state=state, sm=sm))
+        sm.add_widget(roster_screen)
+
 
         if os.path.isfile(DB_FILENAME):
             sm.current = 'login_screen'
         else:
             sm.current = 'create_db_screen'
+
 
         return sm
 
