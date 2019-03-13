@@ -5,31 +5,24 @@ from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.clock import Clock
 
-class RosterWidget(StackLayout):
+class ContactAddWidget(StackLayout):
 
     def __init__(self, state, sm, **kwargs):
         self.state = state
         self.sm = sm
         super().__init__(**kwargs)
+        
+        self.name = TextInput(multiline=False, 
+                              hint_text='Name', password=False,
+                              size_hint=(1, .2))
+        self.add_widget(self.name)
 
         self.add_button = Button(text='Add',
-                                 font_size='70sp', 
                                  size_hint=(1, .2))
         self.add_widget(self.add_button)        
         self.add_button.bind(on_press=self.on_add_button_pressed)
 
-
-    def on_pre_enter(self, *args, **kwargs):
-        # TODO: remove previous labels when adding new ones
-        print('found {} contacts'.format(len(self.state.list_contacts())) )
-        for contact in self.state.list_contacts():
-
-          print('contact:', contact.name)
-
-          self.add_widget(Label(text=contact.name, 
-                                font_size='50sp', 
-                                size_hint=(1, .1),))
-
-
     def on_add_button_pressed(self, instance):
-        self.sm.current = 'contact_add_screen'
+      self.state.add_contact(name=self.name.text)
+      self.state.dump()
+      self.sm.current = 'roster_screen'

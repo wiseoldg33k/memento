@@ -21,6 +21,7 @@ from memento.state import State
 from memento.widgets.login import LoginWidget
 from memento.widgets.createdb import CreateDBWidget
 from memento.widgets.roster import RosterWidget
+from memento.widgets.contact import ContactAddWidget
 
 SALT_FILENAME = 'salt'
 DB_FILENAME = 'memento.db'
@@ -52,15 +53,19 @@ class MementoApp(App):
 
 
         roster_screen = Screen(name='roster_screen')
-        roster_screen.add_widget(RosterWidget(state=state, sm=sm))
+        roster_widget = RosterWidget(state=state, sm=sm)
+        roster_screen.add_widget(roster_widget)
+        roster_screen.bind(on_pre_enter=roster_widget.on_pre_enter)
         sm.add_widget(roster_screen)
 
+        contact_add_screen = Screen(name='contact_add_screen')
+        contact_add_screen.add_widget(ContactAddWidget(state=state, sm=sm))
+        sm.add_widget(contact_add_screen)
 
         if os.path.isfile(DB_FILENAME):
             sm.current = 'login_screen'
         else:
             sm.current = 'create_db_screen'
-
 
         return sm
 
