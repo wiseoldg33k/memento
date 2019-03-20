@@ -63,5 +63,9 @@ class MementoApp(App):
         return sm
 
 
-if __name__ == "__main__":
+def main():
     MementoApp().run()
+
+
+if __name__ == "__main__":
+    main()
