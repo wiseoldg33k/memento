@@ -1,22 +1,14 @@
-import kivy
-
-
 import os
-
-from kivy.config import Config
+import kivy
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 
-from memento.state import State
-from memento.widgets.login import LoginWidget
-from memento.widgets.createdb import CreateDBWidget
-from memento.widgets.roster import RosterWidget
-from memento.widgets.contact import ContactAddWidget
 
 kivy.require("1.10.1")
 
 # TODO: find a more elegant solution later
 
+from kivy.config import Config  # noqa: E402
 
 Config.set("graphics", "position", "custom")
 Config.set("graphics", "left", 100)
@@ -24,6 +16,14 @@ Config.set("graphics", "top", 100)
 
 Config.set("graphics", "width", "400")
 Config.set("graphics", "height", "711")
+
+
+from memento.state import State  # noqa: E402
+from memento.widgets.login import LoginWidget  # noqa: E402
+from memento.widgets.createdb import CreateDBWidget  # noqa: E402
+from memento.widgets.roster import RosterWidget  # noqa: E402
+from memento.widgets.contact import ContactAddWidget  # noqa: E402
+
 
 DB_FILENAME = "memento.db"
 
