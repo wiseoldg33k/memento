@@ -23,6 +23,9 @@ Config.set("graphics", "position", "custom")
 Config.set("graphics", "left", 100)
 Config.set("graphics", "top", 100)
 
+Config.set('graphics', 'width', '400')
+Config.set('graphics', 'height', '711')
+
 SALT_FILENAME = "salt"
 DB_FILENAME = "memento.db"
 
