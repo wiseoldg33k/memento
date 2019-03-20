@@ -1,7 +1,6 @@
 import kivy
 
 
-import bcrypt
 import os
 
 from kivy.config import Config
@@ -23,23 +22,15 @@ Config.set("graphics", "position", "custom")
 Config.set("graphics", "left", 100)
 Config.set("graphics", "top", 100)
 
-Config.set('graphics', 'width', '400')
-Config.set('graphics', 'height', '711')
+Config.set("graphics", "width", "400")
+Config.set("graphics", "height", "711")
 
-SALT_FILENAME = "salt"
 DB_FILENAME = "memento.db"
 
 
 class MementoApp(App):
     def build(self):
-        if not os.path.isfile(SALT_FILENAME):
-            with open(SALT_FILENAME, "wb") as fsalt:
-                fsalt.write(bcrypt.gensalt(14))
-
-        with open(SALT_FILENAME, "rb") as fsalt:
-            salt = fsalt.read()
-
-        state = State(salt=salt)
+        state = State()
         sm = ScreenManager()
 
         create_screen = Screen(name="create_db_screen")

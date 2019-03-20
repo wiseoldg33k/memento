@@ -1,7 +1,7 @@
 import pytest
 import os
 import tempfile
-from memento import State
+from memento.state import State
 
 
 @pytest.fixture
@@ -11,8 +11,7 @@ def pincode():
 
 @pytest.fixture
 def state():
-    salt = b"$2b$04$d7JNTkkjB3vLqmMMoX/Mzu"
-    state = State(salt=salt)
+    state = State()
     return state
 
 

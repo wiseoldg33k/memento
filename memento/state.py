@@ -1,4 +1,3 @@
-import bcrypt
 import json
 import base64
 import hashlib
@@ -13,9 +12,7 @@ def to_json(obj):
 
 
 class State:
-    def __init__(self, salt):
-        self.salt = salt
-
+    def __init__(self):
         self._data = {"contacts": []}
 
         self.__key = None
@@ -25,19 +22,10 @@ class State:
         return not self.db_exists
 
     def hash_pin(self, pin):
-        """
-        This function transforms a PIN code into
-        a Fernet-compatible key in 2 steps:
-        - convert the PIN code into fixed-size base64 hash to prevent
-          bcrypt failure if the key is >72 characters
-        - convert the hash into a 32-bytes base64 hash to feed Fernet,
-          because that's its key format
-        """
         fixed_size_password = base64.b64encode(
             hashlib.sha256(pin.encode("utf-8")).digest()
         )
-        hashed = bcrypt.hashpw(fixed_size_password, self.salt)
-        truncated = hashed[:32]
+        truncated = fixed_size_password[:32]
         return base64.b64encode(truncated)
 
     def dump(self, decryption_key=None, db_location=None):
@@ -52,8 +40,6 @@ class State:
                 "for a clean state, decryption_key and "
                 "db_location must be passed explicitly"
             )
-
-        print("saving {} contacts".format(len(self.list_contacts())))
 
         f = Fernet(decryption_key)
         content = json.dumps(self._data, default=to_json).encode("utf-8")
