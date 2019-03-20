@@ -1,11 +1,11 @@
 import pytest
 import time
 import os
-import tempfile
+
 
 @pytest.fixture
 def slow_state(state):
-    state.salt = b'$2b$14$BMOTE4FHkpRb1tU1heKnFe'
+    state.salt = b"$2b$14$BMOTE4FHkpRb1tU1heKnFe"
     return state
 
 
@@ -25,7 +25,7 @@ def test_pin_code_hashing_takes_more_than_a_second(slow_state, pincode):
 
     start = time.perf_counter()
 
-    hashed = slow_state.hash_pin(pincode)
+    slow_state.hash_pin(pincode)
 
     end = time.perf_counter()
 
@@ -36,7 +36,7 @@ def test_pin_code_hashing_takes_more_than_a_second(slow_state, pincode):
 
 def test_it_can_decrypt_encrypted_database(state, db_location, pincode):
 
-    state._data = {'hello': 'world'}
+    state._data = {"hello": "world"}
 
     decryption_key = state.hash_pin(pincode)
 
@@ -48,4 +48,4 @@ def test_it_can_decrypt_encrypted_database(state, db_location, pincode):
 
     assert state.load(decryption_key, db_location)
 
-    assert state._data['hello'] == 'world'
+    assert state._data["hello"] == "world"
