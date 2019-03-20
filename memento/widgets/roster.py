@@ -37,7 +37,9 @@ class RosterWidget(StackLayout):
 
     def on_pre_enter(self, *args, **kwargs):
         print("found {} contacts".format(len(self.state.list_contacts())))
-        for contact in self.state.list_contacts():
+        for contact in sorted(
+            self.state.list_contacts(), key=lambda x: x.name
+        ):
             print("contact:", contact.name)
             if contact.name not in self.loaded:
                 btn = Button(text=contact.name)

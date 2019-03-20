@@ -25,3 +25,4 @@ class ContactAddWidget(StackLayout):
         self.state.add_contact(name=self.name.text)
         self.state.dump()
         self.sm.current = "roster_screen"
+        self.name.text = ""
