@@ -1,7 +1,17 @@
+import os
+
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.button import Button
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
+
+
+class ImageButton(ButtonBehavior, Image):
+    def __init__(self, source, **kwargs):
+        super(ImageButton, self).__init__(**kwargs)
+        self.source = source
 
 
 class RosterWidget(StackLayout):
@@ -42,7 +52,13 @@ class RosterWidget(StackLayout):
         ):
             print("contact:", contact.name)
             if contact.name not in self.loaded:
-                btn = Button(text=contact.name)
+
+                if contact.profile_picture and os.path.isfile(
+                    contact.profile_picture
+                ):
+                    btn = ImageButton(source=contact.profile_picture)
+                else:
+                    btn = Button(text=contact.name)
                 self.loaded[contact.name] = btn
                 self.layout.add_widget(btn)
 

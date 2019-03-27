@@ -17,7 +17,7 @@ Config.set("graphics", "top", 100)
 Config.set("graphics", "width", "400")
 Config.set("graphics", "height", "711")
 
-
+from memento import DB_FILENAME, PROFILE_PICTURES_LOCATION  # noqa: E402
 from memento.state import State  # noqa: E402
 from memento.widgets.login import LoginWidget  # noqa: E402
 from memento.widgets.createdb import CreateDBWidget  # noqa: E402
@@ -25,11 +25,12 @@ from memento.widgets.roster import RosterWidget  # noqa: E402
 from memento.widgets.contact import ContactAddWidget  # noqa: E402
 
 
-DB_FILENAME = "memento.db"
-
-
 class MementoApp(App):
     def build(self):
+
+        if not os.path.isdir(PROFILE_PICTURES_LOCATION):
+            os.makedirs(PROFILE_PICTURES_LOCATION)
+
         state = State()
         sm = ScreenManager()
 
@@ -59,6 +60,10 @@ class MementoApp(App):
             sm.current = "login_screen"
         else:
             sm.current = "create_db_screen"
+
+        # XXX: this is only for debug
+        state.load(state.hash_pin("1234"), DB_FILENAME)
+        sm.current = "roster_screen"
 
         return sm
 
