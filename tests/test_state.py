@@ -25,8 +25,8 @@ def test_it_cannot_save_a_database_that_has_not_been_loaded(state):
 
 
 def test_it_can_load_contacts_from_state(state):
-    state.add_contact(name="John")
-    state.add_contact(name="Jane")
+    state.add_contact(name="John", profile_picture=None)
+    state.add_contact(name="Jane", profile_picture=None)
 
     expected = sorted(["John", "Jane"])
     output = [c.name for c in state.list_contacts()]

@@ -67,8 +67,10 @@ class State:
 
         return True
 
-    def add_contact(self, name):
-        self._data["contacts"].append(Contact(name=name))
+    def add_contact(self, name, profile_picture):
+        self._data["contacts"].append(
+            Contact(name=name, profile_picture=profile_picture)
+        )
 
     def list_contacts(self):
         return self._data["contacts"]
