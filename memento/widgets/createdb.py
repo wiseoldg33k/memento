@@ -1,27 +1,42 @@
-from kivy.uix.gridlayout import GridLayout
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.clock import Clock
 
+from . import use_font
 
-class CreateDBWidget(GridLayout):
+
+class CreateDBWidget(StackLayout):
     def __init__(self, state, db_filename, **kwargs):
         self.state = state
         self.db_filename = db_filename
         super().__init__(**kwargs)
 
-        self.rows = 3
-        self.add_widget(Label(text="Create New Database", font_size="70sp"))
+        self.add_widget(Label(text="M", font_size="70sp", size_hint=(1, 0.6)))
+        self.add_widget(
+            Label(
+                markup=True,
+                text=use_font(
+                    """
+No database found
+
+1. Enter a PIN code
+2. Press Create
+                """
+                ),
+                size_hint=(1, 0.2),
+            )
+        )
         self.pincode = TextInput(
             multiline=False,
-            font_size="70sp",
             hint_text="Enter a PIN Code",
             password=False,
+            size_hint=(1, 0.1),
         )
         self.add_widget(self.pincode)
 
-        self.create_button = Button(text="Create", font_size="70sp")
+        self.create_button = Button(text="Create", size_hint=(1, 0.1))
         self.add_widget(self.create_button)
         self.create_button.bind(on_press=self.on_create_button_pressed)
 

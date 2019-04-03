@@ -7,6 +7,8 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 
+from . import use_font
+
 
 class ImageButton(ButtonBehavior, Image):
     def __init__(self, source, **kwargs):
@@ -21,7 +23,7 @@ class RosterWidget(StackLayout):
         super().__init__(**kwargs)
 
         self.add_button = Button(
-            text="Add", font_size="70sp", size_hint=(1, 0.2)
+            text=use_font("Add"), markup=True, size_hint=(1, 0.2)
         )
 
         self.add_widget(self.add_button)
@@ -58,7 +60,10 @@ class RosterWidget(StackLayout):
                 ):
                     btn = ImageButton(source=contact.profile_picture)
                 else:
-                    btn = Button(text=contact.name)
+                    btn = Button(
+                        text=use_font(contact.name, font="KronaOne"),
+                        markup=True,
+                    )
                 self.loaded[contact.name] = btn
                 self.layout.add_widget(btn)
 

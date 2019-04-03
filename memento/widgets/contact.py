@@ -83,10 +83,14 @@ class ContactAddWidget(StackLayout):
         self.state.dump()
         self.sm.current = "roster_screen"
         self.name.text = ""
+        if "filename" in self.profile_picture:
+            del self.profile_picture["filename"]
 
     def on_cancel_button_pressed(self, instance):
         self.sm.current = "roster_screen"
         self.name.text = ""
+        if "filename" in self.profile_picture:
+            del self.profile_picture["filename"]
 
     def on_add_image_button_pressed(self, instance):
         content = LoadImageDialog(
