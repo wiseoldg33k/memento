@@ -61,9 +61,9 @@ class MementoApp(App):
         else:
             sm.current = "create_db_screen"
 
-        # XXX: this is only for debug
-        state.load(state.hash_pin("1234"), DB_FILENAME)
-        sm.current = "roster_screen"
+        # # XXX: this is only for debug
+        # state.load(state.hash_pin("1234"), DB_FILENAME)
+        # sm.current = "roster_screen"
 
         return sm
 
