@@ -1,5 +1,4 @@
 import os
-import shutil
 
 from hashlib import md5
 
@@ -11,6 +10,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.filechooser import FileChooserIconView
 
 from memento import PROFILE_PICTURES_LOCATION
+from memento.image import crop_profile_picture
 
 
 class LoadImageDialog(StackLayout):
@@ -43,7 +43,7 @@ class LoadImageDialog(StackLayout):
                 pp_name = os.path.join(
                     PROFILE_PICTURES_LOCATION, "{}.jpg".format(hashed_filename)
                 )
-                shutil.copy(filename, pp_name)
+                crop_profile_picture(filename, pp_name)
                 self.profile_picture["filename"] = pp_name
                 self.dlg.dismiss()
 
