@@ -1,6 +1,6 @@
 import cryptography
 
-from kivy.uix.gridlayout import GridLayout
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
@@ -8,24 +8,23 @@ from kivy.uix.textinput import TextInput
 from kivy.clock import Clock
 
 
-class LoginWidget(GridLayout):
+class LoginWidget(StackLayout):
     def __init__(self, state, db_filename, sm, **kwargs):
         self.state = state
         self.db_filename = db_filename
         self.sm = sm
         super().__init__(**kwargs)
 
-        self.rows = 3
-        self.add_widget(Label(text="Memento", font_size="70sp"))
+        self.add_widget(Label(text="M", font_size="70sp", size_hint=(1, 0.6)))
         self.pincode = TextInput(
             multiline=False,
-            font_size="70sp",
             hint_text="Enter a PIN Code",
             password=False,
+            size_hint=(1, 0.1),
         )
         self.add_widget(self.pincode)
 
-        self.login_button = Button(text="OK", font_size="70sp")
+        self.login_button = Button(text="OK", size_hint=(1, 0.3))
         self.add_widget(self.login_button)
         self.login_button.bind(on_press=self.on_login_button_pressed)
 
