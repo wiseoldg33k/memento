@@ -3,6 +3,7 @@ from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.stacklayout import StackLayout
+from kivy.uix.gridlayout import GridLayout
 
 
 class TopSegment(StackLayout):
@@ -29,13 +30,20 @@ class TopSegment(StackLayout):
         )
 
 
-class BottomSegment(StackLayout):
+class BottomSegment(GridLayout):
     def __init__(self, state, sm, screen, **kwargs):
         self.state = state
         self.sm = sm
         self.screen = screen
         super().__init__(**kwargs)
-        self.add_widget(Label(text="Bottom Segment"))
+        self.cols = 2
+
+        self.screen.bind(on_pre_enter=self.update_widgets)
+
+    def update_widgets(self, *args, **kwargs):
+        # contact = self.state.edited_contact
+        self.add_widget(Button(text="Add Event"))
+        self.add_widget(Button(text="Add Reminder"))
 
 
 class MiddleSegment(StackLayout):
