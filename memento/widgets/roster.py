@@ -66,6 +66,11 @@ class RosterWidget(StackLayout):
                     )
                 self.loaded[contact.name] = btn
                 self.layout.add_widget(btn)
+                btn.contact_name = contact.name
+                btn.bind(on_press=self.on_contact_button_pressed)
 
     def on_add_button_pressed(self, instance):
         self.sm.current = "contact_add_screen"
+
+    def on_contact_button_pressed(self, instance):
+        print("pressed button for:", instance.contact_name)
