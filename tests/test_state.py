@@ -1,5 +1,5 @@
 import pytest
-from memento.contact import Contact
+from memento.models import Contact
 from memento.state import to_json
 import json
 

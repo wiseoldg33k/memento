@@ -1,3 +1,4 @@
 Kivy==1.10.1
 cryptography==2.6.1
 python-resize-image==1.1.18
+marshmallow==2.19.2

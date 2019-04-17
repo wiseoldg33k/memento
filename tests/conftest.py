@@ -1,6 +1,6 @@
 import pytest
-import os
 import tempfile
+import shutil
 from memento.state import State
 
 
@@ -17,7 +17,7 @@ def state():
 
 @pytest.fixture
 def db_location():
-    fd, name = tempfile.mkstemp(suffix=".db")
-    os.close(fd)
-    os.remove(name)
-    return name
+    name = tempfile.mkdtemp(suffix=".db")
+    print(name)
+    yield name
+    shutil.rmtree(name)

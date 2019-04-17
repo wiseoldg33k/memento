@@ -1,10 +1,9 @@
 import json
-import base64
-import hashlib
 
 from cryptography.fernet import Fernet
 
-from .contact import Contact
+from . import hash_pincode
+from .models import Contact
 
 
 def to_json(obj):
@@ -36,11 +35,7 @@ class State:
         return not self.db_exists
 
     def hash_pin(self, pin):
-        fixed_size_password = base64.b64encode(
-            hashlib.sha256(pin.encode("utf-8")).digest()
-        )
-        truncated = fixed_size_password[:32]
-        return base64.b64encode(truncated)
+        return hash_pincode(pin)
 
     def dump(self, decryption_key=None, db_location=None):
         if decryption_key is None:
