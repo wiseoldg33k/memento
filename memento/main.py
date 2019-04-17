@@ -22,7 +22,8 @@ from memento.state import State  # noqa: E402
 from memento.widgets.login import LoginWidget  # noqa: E402
 from memento.widgets.createdb import CreateDBWidget  # noqa: E402
 from memento.widgets.roster import RosterWidget  # noqa: E402
-from memento.widgets.contact import ContactAddWidget  # noqa: E402
+from memento.widgets.contact.add import ContactAddWidget  # noqa: E402
+from memento.widgets.contact.edit import ContactEditWidget  # noqa: E402
 
 
 class MementoApp(App):
@@ -56,6 +57,12 @@ class MementoApp(App):
         contact_add_screen.add_widget(ContactAddWidget(state=state, sm=sm))
         sm.add_widget(contact_add_screen)
 
+        contact_edit_screen = Screen(name="contact_edit_screen")
+        contact_edit_screen.add_widget(
+            ContactEditWidget(state=state, sm=sm, screen=contact_edit_screen)
+        )
+        sm.add_widget(contact_edit_screen)
+
         if os.path.isfile(DB_FILENAME):
             sm.current = "login_screen"
         else:
@@ -63,7 +70,8 @@ class MementoApp(App):
 
         # XXX: this is only for debug
         state.load(state.hash_pin("1234"), DB_FILENAME)
-        sm.current = "roster_screen"
+        state.set_edited_contact("Alice")
+        sm.current = "contact_edit_screen"
 
         return sm
 
