@@ -18,6 +18,5 @@ def state():
 @pytest.fixture
 def db_location():
     name = tempfile.mkdtemp(suffix=".db")
-    print(name)
     yield name
     shutil.rmtree(name)
