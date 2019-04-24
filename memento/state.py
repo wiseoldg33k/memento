@@ -1,7 +1,3 @@
-import json
-
-from cryptography.fernet import Fernet
-
 from . import hash_pincode
 from .models import Contact
 
@@ -11,10 +7,8 @@ def to_json(obj):
 
 
 class State:
-    def __init__(self):
-        self._data = {"contacts": []}
-        self.__key = None
-        self.__db_location = None
+    def __init__(self, backend):
+        self.backend = backend
 
         # transient state
         self._edited_contact = None
@@ -37,49 +31,9 @@ class State:
     def hash_pin(self, pin):
         return hash_pincode(pin)
 
-    def dump(self, decryption_key=None, db_location=None):
-        if decryption_key is None:
-            decryption_key = self.__key
-
-        if db_location is None:
-            db_location = self.__db_location
-
-        if decryption_key is None or db_location is None:
-            raise RuntimeError(
-                "for a clean state, decryption_key and "
-                "db_location must be passed explicitly"
-            )
-
-        f = Fernet(decryption_key)
-        content = json.dumps(self._data, default=to_json).encode("utf-8")
-        encrypted_content = f.encrypt(content)
-
-        with open(db_location, "wb") as db:
-            db.write(encrypted_content)
-
-        return True
-
-    def load(self, decryption_key, db_location):
-        with open(db_location, "rb") as db:
-            encrypted_content = db.read()
-
-        f = Fernet(decryption_key)
-        content = f.decrypt(encrypted_content)
-        self._data = json.loads(content)
-
-        self._data["contacts"] = [
-            Contact(**data) for data in self._data["contacts"]
-        ]
-
-        self.__key = decryption_key
-        self.__db_location = db_location
-
-        return True
-
-    def add_contact(self, name, profile_picture):
-        self._data["contacts"].append(
-            Contact(name=name, profile_picture=profile_picture)
-        )
+    def add_contact(self, name, profile_picture=""):
+        contact = Contact(name=name, profile_picture=profile_picture)
+        self.backend.save(contact)
 
     def list_contacts(self):
-        return self._data["contacts"]
+        return self.backend.all(Contact)
