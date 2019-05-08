@@ -2,11 +2,14 @@ import os
 import uuid
 import logging
 
+import cryptography
+
 from cryptography.fernet import Fernet
 
 logger = logging.getLogger(__name__)
 
-INIT_MARKER = ".init"
+INIT_MARKER_FILE = ".init"
+INIT_MARKER = b"memento"
 
 
 class ResultSet(list):
@@ -22,15 +25,27 @@ class Backend:
         self.key = key
         self._f = Fernet(self.key)
 
-        self.marker_filename = os.path.join(self.db_location, INIT_MARKER)
+        self.marker_filename = os.path.join(self.db_location, INIT_MARKER_FILE)
 
     @property
     def initialized(self):
-        return os.path.isfile(self.marker_filename)
+        is_initialized = os.path.isfile(self.marker_filename)
+        print("init: ", is_initialized)
 
     def init(self):
-        with open(self.marker_filename, "w"):
+        os.makedirs(self.db_location, exist_ok=True)
+        with open(self.marker_filename, "wb") as marker:
+            encrypted_content = self._f.encrypt(INIT_MARKER)
+            marker.write(encrypted_content)
             logger.info("backend initialized")
+
+    def verify(self):
+        with open(self.marker_filename, "rb") as marker:
+            try:
+                content = self._f.decrypt(marker.read())
+            except cryptography.fernet.InvalidToken:
+                return False
+            return content == INIT_MARKER
 
     def save(self, obj):
         if not hasattr(obj, "id") or obj.id is None:
@@ -59,6 +74,9 @@ class Backend:
         schema = klass.Meta()
 
         result = ResultSet()
+
+        if not os.path.isdir(type_folder):
+            return result
 
         for filename in os.listdir(type_folder):
             object_filename = os.path.join(type_folder, filename)

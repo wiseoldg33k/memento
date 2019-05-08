@@ -1,11 +1,11 @@
-import cryptography
-
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.clock import Clock
+
+from ..backend import Backend
 
 
 class LoginWidget(StackLayout):
@@ -38,10 +38,11 @@ class LoginWidget(StackLayout):
 
     def open_db(self, _):
         key = self.state.hash_pin(self.pincode.text)
-        try:
-            self.state.load(key, self.db_filename)
+        backend = Backend(db_location=self.db_filename, key=key)
+        if backend.verify():
+            self.state.set_backend(backend=backend)
             self.sm.current = "roster_screen"
-        except cryptography.fernet.InvalidToken:
+        else:
             close_button = Button(text="Close")
             popup = Popup(
                 title="Invalid PIN code",
