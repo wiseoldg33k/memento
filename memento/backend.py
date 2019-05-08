@@ -30,7 +30,7 @@ class Backend:
     @property
     def initialized(self):
         is_initialized = os.path.isfile(self.marker_filename)
-        print("init: ", is_initialized)
+        return is_initialized
 
     def init(self):
         os.makedirs(self.db_location, exist_ok=True)
