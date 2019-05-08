@@ -69,11 +69,13 @@ class MementoApp(App):
             sm.current = "create_db_screen"
 
         # # XXX: this is only for debug
-        # state.set_backend(
-        #     Backend(db_location=DB_FILENAME, key=state.hash_pin("1234"))
-        # )
-        # state.set_edited_contact("Alice")
-        # sm.current = "contact_edit_screen"
+        from .backend import Backend
+
+        state.set_backend(
+            Backend(db_location=DB_FILENAME, key=state.hash_pin("1234"))
+        )
+        state.set_edited_contact("Alice")
+        sm.current = "contact_edit_screen"
 
         return sm
 
