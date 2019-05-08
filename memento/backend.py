@@ -1,7 +1,12 @@
 import os
 import uuid
+import logging
 
 from cryptography.fernet import Fernet
+
+logger = logging.getLogger(__name__)
+
+INIT_MARKER = ".init"
 
 
 class ResultSet(list):
@@ -16,6 +21,16 @@ class Backend:
         self.db_location = db_location
         self.key = key
         self._f = Fernet(self.key)
+
+        self.marker_filename = os.path.join(self.db_location, INIT_MARKER)
+
+    @property
+    def initialized(self):
+        return os.path.isfile(self.marker_filename)
+
+    def init(self):
+        with open(self.marker_filename, "w"):
+            logger.info("backend initialized")
 
     def save(self, obj):
         if not hasattr(obj, "id") or obj.id is None:

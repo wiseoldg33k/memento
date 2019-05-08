@@ -8,6 +8,12 @@ def test_it_can_create_a_backend(db_location, pincode):
     assert Backend(db_location, hash_pincode(pincode))
 
 
+def test_it_can_set_a_marker_after_init(backend):
+    assert not backend.initialized
+    backend.init()
+    assert backend.initialized
+
+
 def test_backend_can_save_object(backend):
     c = Contact(name="John")
 

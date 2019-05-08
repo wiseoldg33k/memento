@@ -7,11 +7,14 @@ def to_json(obj):
 
 
 class State:
-    def __init__(self, backend):
-        self.backend = backend
+    def __init__(self):
+        self.backend = None
 
         # transient state
         self._edited_contact = None
+
+    def set_backend(self, backend):
+        self.backend = backend
 
     @property
     def edited_contact(self):
@@ -26,7 +29,7 @@ class State:
         raise ValueError("contact {} not found".format(name))
 
     def db_should_be_created(self):
-        return not self.db_exists
+        return not self.backend.initialized
 
     def hash_pin(self, pin):
         return hash_pincode(pin)
