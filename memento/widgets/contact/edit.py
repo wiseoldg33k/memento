@@ -1,4 +1,4 @@
-from kivy.graphics import Color, Rectangle
+# from kivy.graphics import Color, Rectangle
 from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.label import Label
@@ -52,15 +52,27 @@ class MiddleSegment(StackLayout):
         self.sm = sm
         self.screen = screen
         super().__init__(**kwargs)
-        self.add_widget(Label(text="Middle Segment"))
 
-        with self.canvas.before:
-            Color(
-                0, 0.6, 0.2, 0.4
-            )  # green; colors range from 0-1 instead of 0-255
-            self.rect = Rectangle(size=self.size, pos=self.pos)
+        # with self.canvas.before:
+        #     Color(
+        #         0, 0.6, 0.2, 0.4
+        #     )  # green; colors range from 0-1 instead of 0-255
+        #     self.rect = Rectangle(size=self.size, pos=self.pos)
+        #
+        # self.bind(size=self._update_rect, pos=self._update_rect)
 
-        self.bind(size=self._update_rect, pos=self._update_rect)
+        self.screen.bind(on_pre_enter=self.update_widgets)
+
+    def update_widgets(self, *args, **kwargs):
+        contact = self.state.edited_contact
+        for event in contact.events:
+            print(event)
+            self.add_widget(
+                Label(
+                    text="{}: {}".format(event["date"], event["description"]),
+                    size_hint=(1, 0.2),
+                )
+            )
 
     def _update_rect(self, instance, value):
         self.rect.pos = instance.pos

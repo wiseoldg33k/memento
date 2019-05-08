@@ -70,11 +70,17 @@ class MementoApp(App):
 
         # # XXX: this is only for debug
         from .backend import Backend
+        from datetime import datetime
 
         state.set_backend(
             Backend(db_location=DB_FILENAME, key=state.hash_pin("1234"))
         )
         state.set_edited_contact("Alice")
+        state.edited_contact.events = [
+            {"date": datetime.now(), "description": "had lunch with Bob"},
+            {"date": datetime.now(), "description": "had lunch with Charles"},
+            {"date": datetime.now(), "description": "had lunch with David"},
+        ]
         sm.current = "contact_edit_screen"
 
         return sm
