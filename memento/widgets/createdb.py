@@ -5,6 +5,7 @@ from kivy.uix.textinput import TextInput
 from kivy.clock import Clock
 
 from . import use_font
+from memento.backend import Backend
 
 
 class CreateDBWidget(StackLayout):
@@ -50,4 +51,5 @@ No database found
 
     def create_db(self, _):
         key = self.state.hash_pin(self.pincode.text)
-        self.state.dump(key, self.db_filename)
+        backend = Backend(db_location=self.db_filename, key=key)
+        backend.init()

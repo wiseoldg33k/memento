@@ -80,7 +80,6 @@ class ContactAddWidget(StackLayout):
             name=self.name.text,
             profile_picture=self.profile_picture.get("filename", ""),
         )
-        self.state.dump()
         self.sm.current = "roster_screen"
         self.name.text = ""
         if "filename" in self.profile_picture:

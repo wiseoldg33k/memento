@@ -8,6 +8,21 @@ def test_it_can_create_a_backend(db_location, pincode):
     assert Backend(db_location, hash_pincode(pincode))
 
 
+def test_it_can_validate_a_pincode_after_init(db_location, pincode):
+    backend = Backend(db_location, hash_pincode(pincode))
+    backend.init()
+    assert backend.verify()
+
+    backend = Backend(db_location, hash_pincode(str(reversed(pincode))))
+    assert not backend.verify()
+
+
+def test_it_can_set_a_marker_after_init(backend):
+    assert not backend.initialized
+    backend.init()
+    assert backend.initialized
+
+
 def test_backend_can_save_object(backend):
     c = Contact(name="John")
 
@@ -58,3 +73,14 @@ def test_resultset_raises_when_calling_one_with_more_than_one_item():
 
     with pytest.raises(RuntimeError):
         res.one()
+
+
+def test_it_creates_a_database_if_it_does_not_exist(state, backend):
+    state.set_backend(backend=backend)
+    assert state.db_should_be_created()
+
+
+def test_it_does_not_create_a_database_if_it_exists(state, backend):
+    state.set_backend(backend=backend)
+    backend.init()
+    assert not state.db_should_be_created()

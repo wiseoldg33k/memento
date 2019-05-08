@@ -25,5 +25,6 @@ def backend(db_location, pincode):
 
 @pytest.fixture
 def state(backend):
-    state = State(backend=backend)
+    state = State()
+    state.set_backend(backend=backend)
     return state
